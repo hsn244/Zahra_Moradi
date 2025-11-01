@@ -1,0 +1,1290 @@
+############################################################################# Fig 2-1
+rm(list = ls())
+f=function(x,a,b,c,alpha,beta){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f(x, a=1, b=1, c=1, alpha=1, beta=1), lwd=2, xlim = c(0,15),ylim=c(0,0.5), ylab = "f(x)")
+curve(f(x, a=2, b=2, c=2, alpha=2, beta=2), lwd=2, add=TRUE, col=2)
+curve(f(x, a=2, b=3, c=4, alpha=3, beta=3), lwd=2, add=TRUE, col=3)
+curve(f(x, a=3, b=3, c=2, alpha=4, beta=3), lwd=2, add=TRUE, col=4)
+curve(f(x, a=4, b=2, c=4, alpha=5, beta=4), lwd=2, add=TRUE, col=5)
+curve(f(x, a=5, b=4, c=5, alpha=6, beta=5), lwd=2, add=TRUE, col=6)
+text(12, 0.5, 'a=1,b=1,c=1,α=1, β=1', cex=1.3, lwd=2)
+text(12, 0.47, 'a=2,b=2,c=2,α=2, β=2', cex=1.3, lwd=2)
+text(12, 0.44, 'a=2,b=3,c=4,α=3, β=3', cex=1.3, lwd=2)
+text(12, 0.41, 'a=3,b=3,c=2,α=4, β=3', cex=1.3, lwd=2)
+text(12, 0.38, 'a=4,b=2,c=4,α=5, β=4', cex=1.3, lwd=2)
+text(12, 0.35, 'a=5,b=4,c=5,α=6, β=5', cex=1.3, lwd=2)
+segments(14, 0.5,  14+1, 0.5 , col=1, lwd=2 ) 
+segments(14, 0.47,  14+1, 0.47 , col=2, lwd=2 ) 
+segments(14, 0.44,  14+1, 0.44 , col=3, lwd=2 ) 
+segments(14, 0.41,  14+1, 0.41 , col=4, lwd=2 )
+segments(14, 0.38,  14+1, 0.38 , col=5, lwd=2 )
+segments(14, 0.35,  14+1, 0.35 , col=6, lwd=2 )
+############################################################################# Tab 2-2
+rm(list = ls())
+options(scipen = 999)
+a=8; b=15; c=12; alpha=20; beta=5
+f1=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+f2=function(x){
+  x^2*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+f3=function(x){
+  x^3*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+f4=function(x){
+  x^4*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+
+m1=integrate(f1,lower = 0, upper = Inf)$value
+m2=integrate(f2,lower = 0, upper = Inf)$value
+m3=integrate(f3,lower = 0, upper = Inf)$value
+m4=integrate(f4,lower = 0, upper = Inf)$value
+sigma2=m2-m1^2
+Sk=(m3-3*m2*m1+2*m1^3)/(sigma2)^1.5
+Cu=(m4-4*m3*m1+6*m2*m1^2+3*m1^4)/(sigma2)^2
+CV=sqrt(sigma2/m1^2)
+med=alpha*((c*qbeta(0.5,a,b))/(c+qbeta(0.5,a,b)-2*c*qbeta(0.5,a,b)))^(1/beta)
+fd1=function(x){
+  abs(x-m1)*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+d1=integrate(fd1,lower = 0, upper = Inf)$value
+fd2=function(x){
+  abs(x-med)*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+d2=integrate(fd2,lower = 0, upper = Inf)$value
+c(m1,m2,m3,m4,sigma2,Sk,Cu,CV,med,d1,d2)
+############################################################################ Fig 2-2
+rm(list = ls())
+a=1; b=3; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/(m*t)*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, lwd=2, xlim = c(0.05,0.95), xlab = "p", ylab = "B(p)")
+text(0.1, 1, 'a=1,b=3,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 1,  0.18+0.05, 1 , col=1, lwd=2 ) 
+a=2; b=3; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/(m*t)*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.15,0.85), col=2,lwd=2)
+text(0.1, 0.95, 'a=2,b=3,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 0.95,  0.18+0.05, 0.95 , col=2, lwd=2 ) 
+a=2; b=3; c=3; alpha=3; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/(m*t)*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.2,0.8), col=3,lwd=2)
+text(0.1, 0.9, 'a=2,b=3,c=3,α=3, β=2', cex=1, lwd=2)
+segments(0.18, 0.9,  0.18+0.05, 0.9 , col=3, lwd=2 ) 
+a=2; b=4; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/(m*t)*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.1,0.9), col=4,lwd=2)
+text(0.1, 0.85, 'a=1,b=1,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 0.85,  0.18+0.05, 0.85 , col=4, lwd=2 )
+############################################################################ Fig 2-3
+rm(list = ls())
+a=1; b=3; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/m*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, lwd=2, xlim = c(0.05,0.95), xlab = "p", ylab = "L(p)")
+text(0.1, 1, 'a=1,b=3,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 1,  0.18+0.05, 1 , col=1, lwd=2 ) 
+a=2; b=3; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/m*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.15,0.85), col=2,lwd=2)
+text(0.1, 0.95, 'a=2,b=3,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 0.95,  0.18+0.05, 0.95 , col=2, lwd=2 ) 
+a=2; b=3; c=3; alpha=3; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/m*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.2,0.8), col=3,lwd=2)
+text(0.1, 0.9, 'a=2,b=3,c=3,α=3, β=2', cex=1, lwd=2)
+segments(0.18, 0.9,  0.18+0.05, 0.9 , col=3, lwd=2 ) 
+a=2; b=4; c=2; alpha=2; beta=2
+f=function(x){
+  x*beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+m=integrate(f,0,Inf)$value
+g=function(t){
+  1/m*integrate(f,0,alpha*((c*qbeta(t,a,b))/(c+qbeta(t,a,b)-2*c*qbeta(t,a,b)))^(1/beta))$value
+}
+h=Vectorize(function(p){
+  g(p)
+})
+curve(h, add=T, xlim = c(0.1,0.9), col=4,lwd=2)
+text(0.1, 0.85, 'a=1,b=1,c=2,α=2, β=2', cex=1, lwd=2)
+segments(0.18, 0.85,  0.18+0.05, 0.85 , col=4, lwd=2 ) 
+############################################################################# Tab 2-3
+rm(list = ls())
+options(scipen = 999)
+
+a=5.5; b=5.5; c=5.5; alpha=6.5; beta=6.5; gamma=3.5
+f1=function(x){
+  -log(beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b)))*(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b)))
+}
+f2=function(x){
+  (beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b)))^gamma
+}
+Shanon=integrate(f1,lower = 0, upper = Inf)$value
+Reni=1/(1-gamma)*log(integrate(f2,lower = 0, upper = Inf)$value)
+c(Shanon,Reni)
+########################################################### Example 3-1 Moment Estimator
+rm(list = ls())
+#################### For a
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=1e3
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+b=10; c=2; alpha=1; beta=1
+f=function(a){
+  inteq=function(y){
+    y^(a*beta)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  F1=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq, 0, Inf)$value-mean(x)
+  F1
+}
+uniroot(f,c(0.1,100))
+#################### For all
+rm(list = ls())
+library(rootSolve)
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=1e3
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+eq.sol=function(p){
+  a=p[1]
+  b=p[2]
+  c=p[3]
+  alpha=p[4]
+  beta=p[5]
+  inteq1=function(y){
+    y^(a*beta)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  inteq2=function(y){
+    y^(a*beta+1)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  inteq3=function(y){
+    y^(a*beta+2)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  inteq4=function(y){
+    y^(a*beta+3)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  inteq5=function(y){
+    y^(a*beta+4)/((c*alpha^beta+y^beta)^(a+b))
+  }
+  F1=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq1, 0, Inf)$value-mean(x)
+  F2=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq2, 0, Inf)$value-mean(x^2)
+  F3=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq3, 0, Inf)$value-mean(x^3)
+  F4=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq4, 0, Inf)$value-mean(x^4)
+  F5=beta*c^b*alpha^(b*beta)/beta(a,b)*integrate(inteq5, 0, Inf)$value-mean(x^5)
+  c(F1=F1, F2=F2, F3=F3, F4=F4, F5=F5)
+}
+multiroot(f=eq.sol, start = c(1.02,10.56,2.09,1.03,1.07), positive = T)
+############################################################ Example 3-2 MLE Estimator
+library(maxLik)
+rm(list = ls())
+a0=1;b0=10; c0=5; alpha0=1; beta0=1;n=1e4
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+loglikte = function(p) {
+  a = p[1]
+  b = p[2]
+  c = p[3]
+  alpha = p[4]
+  beta = p[5]
+  (n*log(beta)+n*b*log(c)+n*b*beta*log(alpha)-n*log(beta(a,b))
+    +(a*beta-1)*sum(log(x))-(a+b)*sum(log(c*alpha^beta+x^beta)))*I(x>0)
+}
+d=maxLik(loglikte,start=c(1.5,10.5,5.5,1.5,1.5))
+summary(d)
+#################################################################### Example 3-3 bayes
+######################################### delta1
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta1=integrate(g1, 0, 100,x=x)$value/integrate(g2, 0, 100,x=x)$value
+delta1
+######################################### delta2
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^2*ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^2*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta2=integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta2
+######################################### delta3
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+f= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g = Vectorize(function(delta3) {integrate(f, lower=0 ,upper=delta3
+   ,x=x)$value/integrate(f, lower=delta3 ,upper=100 ,x=x)$value}-1)
+delta3 = uniroot(g,c(0,2))$root
+delta3
+######################################### delta4
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;c=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (exp(-c*ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta4=-1/c*log(integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value)
+delta4
+######################################### delta5
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+f= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g = Vectorize(function(delta5) {integrate(f, lower=0 ,upper=delta5
+   ,x=x)$value/integrate(f, lower=delta5 ,upper=100 ,x=x)$value}-1)
+delta5 = uniroot(g,c(0,2))$root
+delta5
+######################################### delta6
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta6=integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta6
+######################################### delta7
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a+1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta7=integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta7
+######################################### delta8
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta8=integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta8
+######################################### delta9
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta9=integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta9
+######################################### delta10
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta10=(integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value)^0.5
+delta10
+######################################### delta11
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (log(ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta11=exp(integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value)
+delta11
+######################################### delta12
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;q=0.5;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-q-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta12=(integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value)^(-1/q)
+delta12
+######################################### delta13
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1; c=0.1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta13=(exp(c)-1)/c*integrate(g1, 0,100,x=x)$value/integrate(g2, 0,100,x=x)$value
+delta13
+############################################################################# Fig 3-1
+rm(list = ls())
+a0=1;b0=10; c0=2; alpha0=1; beta0=1;n=30
+set.seed(100)
+V=rbeta(n,alpha0,beta0)
+x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+n=length(x)
+a=1; b=1
+g1_1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_1= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta1=integrate(g1_1, 0, 50,x=x)$value/integrate(g2_1, 0, 50,x=x)$value
+h1=function(x1,t1){
+  ((delta1-t1)^2*t1*c0^b0*alpha0^(b0*t1)*x1^(a0*t1-1)/(beta(a0,b0)
+                                                       *(c0*alpha0^t1+x1^t1)^(a0+b0)))
+}
+ht1 = function(t1) integrate(function(x1) h1(x1, t1), 0, 50)$value
+ht1 = Vectorize(ht1)
+
+g1_2=  function(t, x){
+  sapply(t, function(ti){
+    (ti^2*ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_2= function(t, x){
+  sapply(t, function(ti){
+    (ti^2*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta2=integrate(g1_2, 0,50,x=x)$value/integrate(g2_2, 0,50,x=x)$value
+h2=function(x2,t2){
+  ((delta2-t2)^2*t2^2*t2*c0^b0*alpha0^(b0*t2)*x2^(a0*t2-1)/(beta(a0,b0)
+                                                            *(c0*alpha0^t2+x2^t2)^(a0+b0)))
+}
+ht2 = function(t2) integrate(function(x2) h2(x2, t2), 0, 50)$value
+ht2 = Vectorize(ht2)
+f3= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+
+g3 = Vectorize(function(delta3) {integrate(f3, lower=0 ,upper=delta3
+                                           ,x=x)$value/integrate(f3, lower=delta3 ,upper=50 ,x=x)$value}-1)
+delta3 = uniroot(g3,c(0,2))$root
+h3=function(x3,t3){
+  (abs(delta3-t3)*t3*c0^b0*alpha0^(b0*t3)*x3^(a0*t3-1)/(beta(a0,b0)
+                                                        *(c0*alpha0^t3+x3^t3)^(a0+b0)))
+}
+ht3 = function(t3) integrate(function(x3) h3(x3, t3), 0, 50)$value
+ht3 = Vectorize(ht3)
+
+c=1
+g1_4= function(t, x){
+  sapply(t, function(ti){
+    (exp(-c*ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_4= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta4=-1/c*log(integrate(g1_4, 0,50,x=x)$value/integrate(g2_4, 0,50,x=x)$value)
+h4=function(x4,t4){
+  ((exp(c*(delta4-t4))-c*(delta4-t4)-1)*t4*c0^b0*alpha0^(b0*t4)*x4^(a0*t4-1)/(beta(a0,b0)
+                                                                              *(c0*alpha0^t4+x4^t4)^(a0+b0)))
+}
+ht4 = function(t4) integrate(function(x4) h4(x4, t4), 0, 50)$value
+ht4 = Vectorize(ht4)
+
+f5= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g5 = Vectorize(function(delta5) {integrate(f5, lower=0 ,upper=delta5
+                                           ,x=x)$value/integrate(f5, lower=delta5 ,upper=50 ,x=x)$value}-1)
+delta5 = uniroot(g5,c(0,2))$root
+h5=function(x5,t5){
+  (abs(delta5/t5-1)*t5*c0^b0*alpha0^(b0*t5)*x5^(a0*t5-1)/(beta(a0,b0)
+                                                          *(c0*alpha0^t5+x5^t5)^(a0+b0)))
+}
+ht5 = function(t5) integrate(function(x5) h5(x5, t5), 0, 50)$value
+ht5 = Vectorize(ht5)
+
+g1_6= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_6= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta6=integrate(g1_6, 0,50,x=x)$value/integrate(g2_6, 0,50,x=x)$value
+h6=function(x6,t6){
+  ((delta6/t6-1)^2*t6*c0^b0*alpha0^(b0*t6)*x6^(a0*t6-1)/(beta(a0,b0)
+                                                         *(c0*alpha0^t6+x6^t6)^(a0+b0)))
+}
+ht6 = function(t6) integrate(function(x6) h6(x6, t6), 0, 50)$value
+ht6 = Vectorize(ht6)
+
+g1_8= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_8= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta8=integrate(g1_8, 0,50,x=x)$value/integrate(g2_8, 0,50,x=x)$value
+h8=function(x8,t8){
+  ((delta8/t8-log(delta8/t8)-1)*t8*c0^b0*alpha0^(b0*t8)*x8^(a0*t8-1)/(beta(a0,b0)
+                                                                      *(c0*alpha0^t8+x8^t8)^(a0+b0)))
+}
+ht8 = function(t8) integrate(function(x8) h8(x8, t8), 0, 50)$value
+ht8 = Vectorize(ht8)
+
+g1_9= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_9= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta9=integrate(g1_9, 0,50,x=x)$value/integrate(g2_9, 0,50,x=x)$value
+h9=function(x9,t9){
+  ((t9/delta9-log(t9/delta9)-1)*t9*c0^b0*alpha0^(b0*t9)*x9^(a0*t9-1)/(beta(a0,b0)
+                                                                      *(c0*alpha0^t9+x9^t9)^(a0+b0)))
+}
+ht9 = function(t9) integrate(function(x9) h9(x9, t9), 0, 50)$value
+ht9 = Vectorize(ht9)
+
+g1_11= function(t, x){
+  sapply(t, function(ti){
+    (log(ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_11= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta11=exp(integrate(g1_11, 0,50,x=x)$value/integrate(g2_11, 0,50,x=x)$value)
+h11=function(x11,t11){
+  ((log(t11)-log(delta11))^2*t11*c0^b0*alpha0^(b0*t11)*x11^(a0*t11-1)/(beta(a0,b0)
+                                                                       *(c0*alpha0^t11+x11^t11)^(a0+b0)))
+}
+ht11 = function(t11) integrate(function(x11) h11(x11, t11), 0, 50)$value
+ht11 = Vectorize(ht11)
+
+q=0.5
+g1_12= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-q-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_12= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta12=(integrate(g1_12, 0,50,x=x)$value/integrate(g2_12, 0,50,x=x)$value)^(-1/q)
+h12=function(x12,t12){
+  (((delta12/t12)^q-q*log(delta12/t12)-1)*t12*c0^b0*alpha0^(b0*t12)
+   *x12^(a0*t12-1)/(beta(a0,b0)*(c0*alpha0^t12+x12^t12)^(a0+b0)))
+}
+ht12 = function(t12) integrate(function(x12) h12(x12, t12), 0, 50)$value
+ht12 = Vectorize(ht12)
+
+c=0.1
+g1_13= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+g2_13= function(t, x){
+  sapply(t, function(ti){
+    (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+     *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+  })
+}
+delta13=(exp(c)-1)/c*integrate(g1_13, 0,50,x=x)$value/integrate(g2_13, 0,50,x=x)$value
+h13=function(x13,t13){
+  ((exp(c*(delta13/t13-1))-c*(delta13/t13-1)-1)*t13*c0^b0*alpha0^(b0*t13)
+   *x13^(a0*t13-1)/(beta(a0,b0)*(c0*alpha0^t13+x13^t13)^(a0+b0)))
+}
+ht13 = function(t13) integrate(function(x13) h13(x13, t13), 0, 50)$value
+ht13 = Vectorize(ht13)
+
+plot(ht1, from = 1, to = 2,col="black", main="نمودار مخاطره برآوردگرهای بیز بتا"
+     , xlab="β" , ylab = "R(β,δ)", pch=2.8)
+curve(ht2, from = 1, to = 2, add = T, col="yellow3")
+curve(ht3, from = 1, to = 2, add = T, col="brown4")
+curve(ht4, from = 1, to = 2, add = T, col="chocolate1")
+curve(ht5, from = 1, to = 2, add = T, col="red")
+curve(ht6, from = 1, to = 2, add = T, col="green")
+curve(ht8, from = 1, to = 2, add = T, col="blue")
+curve(ht9, from = 1, to = 2, add = T, col="darkgreen")
+curve(ht11, from =1, to = 2, add = T, col="darkorchid1")
+curve(ht12, from = 1, to = 2, add = T, col="palevioletred1")
+curve(ht13, from = 1, to = 2, add = T, col="yellowgreen")
+legend(1,2.75,legend=c("Square error","Weighted square error","Absolute error"
+                       ,"LINEX","Weighted absolute error", "DeGroot", "Entropy"
+                       ,"Stein", "Square error Log","Generalized Entropy"
+                       ,"Generalized LINEX")
+       , col=c("black","yellow3","brown4","chocolate1","red","green"
+               ,"blue","darkgreen", "darkorchid1","palevioletred1","yellowgreen")
+       ,pch=c("_","_","_","_","_","_","_","_","_","_","_"), ncol=1)
+
+############################################################################ Table 3-15
+rm(list=ls())
+library(maxLik)
+m=1000
+n=5
+MS=replicate(m,expr={
+  a0=1;b0=10; c0=2; alpha0=1; beta0=1
+  V=rbeta(n,alpha0,beta0)
+  x=((c0*alpha0^beta0*V)/(1-V))^(1/beta0)
+  a=1; b=2; c=1; q=0.5
+  loglikte = function(p) {
+    (n*log(p)+n*b0*log(c0)+n*b0*p*log(alpha0)-n*log(beta(a0,b0))
+     +(a0*p-1)*sum(log(x))-(a0+b0)*sum(log(c0*alpha0^p+x^p)))*I(x>0)
+  }
+  d=maxLik(loglikte,start=c(0.5))
+  MLE=d$estimate
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta1=integrate(g1, 0, 50,x=x)$value/integrate(g2, 0, 50,x=x)$value
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti*(1-ti)*ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti*(1-ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta2=integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  f= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g = Vectorize(function(delta3) {integrate(f, lower=0 ,upper=delta3
+                                            ,x=x)$value/integrate(f, lower=delta3 ,upper=50 ,x=x)$value}-1)
+  delta3 = uniroot(g,c(0,2))$root
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (exp(-c*ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta4=-1/c*log(integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value)
+  
+  f= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g = Vectorize(function(delta5) {integrate(f, lower=0 ,upper=delta5
+                                            ,x=x)$value/integrate(f, lower=delta5 ,upper=50 ,x=x)$value}-1)
+  delta5 = uniroot(g,c(0,2))$root
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta6=integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a+1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta7=integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta8=integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta9=integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta10=(integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value)^0.5
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (log(ti)*ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta11=exp(integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value)
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-q-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-1)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta12=(integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value)^(-1/q)
+  
+  
+  g1= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-2)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  g2= function(t, x){
+    sapply(t, function(ti){
+      (ti^(n+a-3)*exp(-ti*(b-n*b0*log(alpha0)))
+       *exp(sum(log((x^(a*ti-1))/((c0*alpha0^ti+x^ti)^(a0+b0))))))
+    })
+  }
+  delta13=(exp(c)-1)/c*integrate(g1, 0,50,x=x)$value/integrate(g2, 0,50,x=x)$value
+  
+  MSE_MLE=(MLE-1)^2
+  MSE_delta1=(delta1-1)^2
+  MSE_delta2=(delta2-1)^2
+  MSE_delta3=(delta3-1)^2
+  MSE_delta4=(delta4-1)^2
+  MSE_delta5=(delta5-1)^2
+  MSE_delta6=(delta6-1)^2
+  MSE_delta7=(delta7-1)^2
+  MSE_delta8=(delta8-1)^2
+  MSE_delta9=(delta9-1)^2
+  MSE_delta10=(delta10-1)^2
+  MSE_delta11=(delta11-1)^2
+  MSE_delta12=(delta12-1)^2
+  MSE_delta13=(delta13-1)^2
+  MSE=c(MSE_delta1,MSE_delta2,MSE_delta3,MSE_delta4,MSE_delta5,MSE_delta6,MSE_delta7
+        ,MSE_delta8,MSE_delta9,MSE_delta10,MSE_delta11,MSE_delta12,MSE_delta13)
+  MSE
+})
+apply(MS, 1, mean)
+
+######################################################## Table 4-1
+rm(list = ls())
+library(maxLik)
+x=c(0.040, 0.301, 0.309, 0.557, 0.943, 1.070, 1.124, 1.248, 1.281, 1.281
+    ,1.303, 1.432, 1.480, 1.505, 1.506, 1.568, 1.615, 1.619, 1.652 ,1.652
+    ,1.757, 1.866, 1.876, 1.899, 1.911, 1.912, 1.914, 1.981, 2.010, 2.038 
+    ,2.085, 2.089, 2.097, 2.135, 2.154, 2.190, 2.194, 2.223, 2.224, 2.229
+    ,2.300 ,2.324, 2.385, 2.481, 2.610, 2.625, 2.632, 2.646, 2.661, 2.688
+    ,2.823, 2.890 ,2.902, 2.934, 2.962, 2.964, 3.000, 3.103, 3.114, 3.117
+    ,3.166, 3.344, 3.376 ,3.443, 3.467, 3.478, 3.578, 3.595, 3.699, 3.779
+    ,3.924, 4.035, 4.121, 4.167 ,4.240, 4.255, 4.278, 4.305, 4.376, 4.449
+    ,4.485, 4.570, 4.602, 4.663)
+n=length(x)
+######################################### BMO-LL
+loglikte=function(p){
+  a=p[1]
+  b=p[2]
+  c=p[3]
+  alpha=p[4]
+  beta=p[5]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(0.08,3.5,14.3,3,22))
+summary(d)
+k=5
+LL1= -120.9525 
+AIC=AIC1=2*k-2*LL1; AIC
+BIC=BIC1=k*log(n)-2*LL1; BIC
+CAIC=CAIC1=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### Log Logistic
+loglikte=function(p){
+  alpha=p[1]
+  beta=p[2]
+  sum(log(
+    alpha^beta*beta*x^(beta-1)/(alpha^beta+x^beta)^2
+  )) 
+}
+d=maxLik(loglikte,start=c(1,1))
+summary(d)
+k=2
+LL2= -139.5812 
+AIC=AIC2=2*k-2*LL2; AIC
+BIC=BIC2=k*log(n)-2*LL2; BIC
+CAIC=CAIC2=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### beta log logistic
+c=1
+loglikte=function(p){
+  a=p[1]
+  b=p[2]
+  alpha=p[3]
+  beta=p[4]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(1,10,2,2))
+summary(d)
+k=4
+LL3= -127.0955 
+AIC=AIC3=2*k-2*LL3; AIC
+BIC=BIC3=k*log(n)-2*LL3; BIC
+CAIC=CAIC3=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### Sing-Madala a=c=1
+a=1;c=1
+loglikte=function(p){
+  b=p[1]
+  alpha=p[2]
+  beta=p[3]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(20,10,2))
+summary(d)
+k=3
+LL4= -130.2677 
+AIC=AIC4=2*k-2*LL4; AIC
+BIC=BIC4=k*log(n)-2*LL4; BIC
+CAIC=CAIC4=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### Dagoom b=c=1
+b=c=1
+loglikte=function(p){
+  a=p[1]
+  alpha=p[2]
+  beta=p[3]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(10,1,1))
+summary(d)
+k=3
+LL5= -126.742 
+AIC=AIC5=2*k-2*LL5; AIC
+BIC=BIC5=k*log(n)-2*LL5; BIC
+CAIC=CAIC5=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+c(AIC1,AIC2,AIC3,AIC4,AIC5)
+c(BIC1,BIC2,BIC3,BIC4,BIC5)
+c(CAIC1,CAIC2,CAIC3,CAIC4,CAIC5)
+######################################################## Table 4-2
+LL=c(LL1,LL2,LL3,LL4,LL5)
+chi_1=2*(LL1-LL2); chi_1
+1-pchisq(chi_1,3)
+chi_2=2*(LL1-LL3); chi_2
+1-pchisq(chi_2,1)
+chi_3=2*(LL1-LL4); chi_3
+1-pchisq(chi_3,2)
+chi_4=2*(LL1-LL5); chi_4
+1-pchisq(chi_4,2)
+######################################################## Fig 4-1
+a=0.010788; b=3.657933; c=61.945022; alpha=4.565164; beta=123.751900
+f1=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f1, lwd=2, xlim = c(0,5),ylim=c(0,0.4), ylab = "f(x)")
+
+a=1; b=1; c=1; alpha=2.3912; beta=3.2238
+f2=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f2, lwd=2, add=TRUE, col=2)
+
+a=0.019537; b=6.522292; c=1; alpha=4.291053; beta=60.525
+f3=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f3, lwd=2, add=TRUE, col=3)
+
+a=1; b=42.6190; c=1; alpha=13.6127; beta=2.3972
+f4=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f4, lwd=2, add=TRUE, col=4)
+
+a=0.0029186; b=1; c=1; alpha=3.6746268; beta=400.9596445
+f5=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f5, lwd=2, add=TRUE, col=5)
+text(0, 0.4, 'BMO-LL', cex=1.3, lwd=2)
+text(0, 0.38, 'LL', cex=1.3, lwd=2)
+text(0, 0.36, 'BLL', cex=1.3, lwd=2)
+text(0, 0.34, 'SM', cex=1.3, lwd=2)
+text(0, 0.32, 'Da', cex=1.3, lwd=2)
+segments(0.15, 0.4,  0.15+0.3, 0.4 , col=1, lwd=2 ) 
+segments(0.15, 0.38,  0.15+0.3, 0.38 , col=2, lwd=2 ) 
+segments(0.15, 0.36,  0.15+0.3, 0.36 , col=3, lwd=2 ) 
+segments(0.15, 0.34,  0.15+0.3, 0.34 , col=4, lwd=2 )
+segments(0.15, 0.32,  0.15+0.3, 0.32 , col=5, lwd=2 )
+
+##################################################### Plasma ferritin data
+rm(list = ls())
+library(maxLik)
+library(alr3) ### For dataset
+x=ais$LBM
+n=length(x)
+######################################### BMO-LL
+loglikte=function(p){
+  a=p[1]
+  b=p[2]
+  c=p[3]
+  alpha=p[4]
+  beta=p[5]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(30,50,19,5,1))
+summary(d)
+k=5
+LL1= -792.5838 
+AIC=AIC1=2*k-2*LL1; AIC
+BIC=BIC1=k*log(n)-2*LL1
+CAIC=CAIC1=AIC+(2*k^2+2*k)/(n-k-1)
+######################################### Log Logistic
+loglikte=function(p){
+  alpha=p[1]
+  beta=p[2]
+  sum(log(
+    alpha^beta*beta*x^(beta-1)/(alpha^beta+x^beta)^2
+  )) 
+}
+d=maxLik(loglikte,start=c(5,1))
+summary(d)
+k=2
+LL2= -806.6892
+AIC=AIC2=2*k-2*LL2; AIC
+BIC=BIC2=k*log(n)-2*LL2; BIC
+CAIC=CAIC2=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### beta log logistic
+c=1
+loglikte=function(p){
+  a=p[1]
+  b=p[2]
+  alpha=p[3]
+  beta=p[4]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(40,50,5,1))
+summary(d)
+k=4
+LL3= -803.2234 
+AIC=AIC3=2*k-2*LL3; AIC
+BIC=BIC3=k*log(n)-2*LL3; BIC
+CAIC=CAIC3=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### Sing-Madala a=c=1
+a=1;c=1
+loglikte=function(p){
+  b=p[1]
+  alpha=p[2]
+  beta=p[3]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(5,5,1))
+summary(d)
+k=3
+LL4= -805.982 
+AIC=AIC4=2*k-2*LL4; AIC
+BIC=BIC4=k*log(n)-2*LL4; BIC
+CAIC=CAIC4=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+######################################### Dagoom b=c=1
+b=c=1
+loglikte=function(p){
+  a=p[1]
+  alpha=p[2]
+  beta=p[3]
+  sum(log(
+    beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+  )) 
+}
+d=maxLik(loglikte,start=c(40,5,1))
+summary(d)
+k=3
+LL5= -806.6046 
+AIC=AIC5=2*k-2*LL5; AIC
+BIC=BIC5=k*log(n)-2*LL5; BIC
+CAIC=CAIC5=AIC+(2*k^2+2*k)/(n-k-1); CAIC
+##############
+c(AIC1,AIC2,AIC3,AIC4,AIC5)
+c(BIC1,BIC2,BIC3,BIC4,BIC5)
+c(CAIC1,CAIC2,CAIC3,CAIC4,CAIC5)
+############################
+LL=c(LL1,LL2,LL3,LL4,LL5)
+chi_1=2*(LL1-LL2); chi_1
+1-pchisq(chi_1,3)
+chi_2=2*(LL1-LL3); chi_2
+1-pchisq(chi_2,1)
+chi_3=2*(LL1-LL4); chi_3
+1-pchisq(chi_3,2)
+chi_4=2*(LL1-LL5); chi_4
+1-pchisq(chi_4,2)
+############################
+a=43.9768; b=72.5771; c=17.8966; alpha=5.1753; beta=0.9485
+f1=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f1, lwd=2, ylab = "f(x)")
+
+a=1; b=1; c=1; alpha=63.6383; beta=8.4738
+f2=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f2, lwd=2, add=TRUE, col=2)
+
+a=0.019537; b=6.522292; c=1; alpha=4.791053; beta=68.778819
+f3=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f3, lwd=2, add=TRUE, col=3)
+
+a=1; b=42.6190; c=1; alpha=13.6127; beta=2.3972
+f4=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f4, lwd=2, add=TRUE, col=4)
+
+a=0.0029186; b=1; c=1; alpha=4.6746268; beta=454.9596445
+f5=function(x){
+  beta*c^b*alpha^(b*beta)*x^(a*beta-1)/(beta(a,b)*(c*alpha^beta+x^beta)^(a+b))
+}
+curve(f5, lwd=2, add=TRUE, col=5)
+text(0, 0.4, 'BMO-LL', cex=1.3, lwd=2)
+text(0, 0.38, 'LL', cex=1.3, lwd=2)
+text(0, 0.36, 'BLL', cex=1.3, lwd=2)
+text(0, 0.34, 'SM', cex=1.3, lwd=2)
+text(0, 0.32, 'Da', cex=1.3, lwd=2)
+segments(0.15, 0.4,  0.15+0.3, 0.4 , col=1, lwd=2 ) 
+segments(0.15, 0.38,  0.15+0.3, 0.38 , col=2, lwd=2 ) 
+segments(0.15, 0.36,  0.15+0.3, 0.36 , col=3, lwd=2 ) 
+segments(0.15, 0.34,  0.15+0.3, 0.34 , col=4, lwd=2 )
+segments(0.15, 0.32,  0.15+0.3, 0.32 , col=5, lwd=2 )
+
